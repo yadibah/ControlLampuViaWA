@@ -1,0 +1,50 @@
+#include <ESP8266WiFi.h>
+#include <ThingESP.h>
+
+
+ThingESP8266 thing("bobyset", "lampu", "123123123");
+
+#define relay 0
+
+unsigned long previousMillis = 0;
+const long INTERVAL = 6000;  
+
+void setup()
+{
+  Serial.begin(115200);
+  pinMode(relay, OUTPUT);
+  thing.SetWiFi("RIP", "20202020");
+
+  thing.initDevice();
+
+}
+
+
+String HandleResponse(String query)
+{
+
+  if (query == "Hidupkan lampu") {
+    digitalWrite(relay,LOW);
+    return "Lampu hidup";
+  }
+
+  else if (query == "Matikan lampu") {
+    digitalWrite(relay, HIGH);
+    return "Lampu mati";
+  }
+
+  else if (query == "Cek lampu")
+    return digitalRead(relay ) ? "Lampu mati: "Lampu hidup";
+    
+  else if (query == "Terima kasih")
+    return "siyap, sama-sama";
+  else return "Perintah tidak terdeteksi";
+
+}
+
+
+void loop()
+{  
+  thing.Handle();
+
+}
